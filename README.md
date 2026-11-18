@@ -49,6 +49,40 @@ npm start          # -> http://localhost:3000/items
 xdg-open css21102026/index.html
 ```
 
+## Backend
+
+El backend está en `server/` y usa Node.js, Express y Prisma con SQLite (un archivo
+local, sin servidor de base de datos). Sirve las páginas del proyecto y expone una
+API REST de deseos.
+
+Para instalarlo y arrancarlo:
+
+```bash
+cd server
+npm install
+npx prisma db push   # crea la base de datos
+npm start
+```
+
+Queda escuchando en <http://localhost:3005> y sirve las páginas del proyecto. Al
+arrancar, si la tabla está vacía, inserta 3 deseos de ejemplo (imágenes 1, 2 y 3).
+La galería se abre en <http://localhost:3005/css21102026/>.
+
+Rutas de la API:
+
+| Método | Ruta | Qué hace |
+| --- | --- | --- |
+| GET | `/api/deseos` | Lista todos los deseos |
+| GET | `/api/deseos/:id` | Devuelve un deseo por id |
+| POST | `/api/deseos` | Crea un deseo (`nombre`, `imagen`) |
+| PUT | `/api/deseos/:id` | Actualiza un deseo |
+| DELETE | `/api/deseos/:id` | Elimina un deseo |
+| GET | `/items` | Lista de ids que usa la galería |
+
+La página `css21102026/index.html` consume esta API con `fetch` y rutas relativas
+(`/items` y `/api/deseos`), así que funciona sin problemas de CORS porque el mismo
+servidor sirve la página y la API.
+
 ## Conceptos practicados
 
 - Manipulación del DOM y eventos.

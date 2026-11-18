@@ -4,7 +4,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
     margin: 0;
 }
 
@@ -73,4 +73,50 @@ button.activo {
         width: 100%;
         height: auto;
     }
+}
+
+.deseos {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #ddd;
+}
+
+.deseos h2 {
+    color: #333;
+}
+
+.deseos form {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+}
+
+.deseos input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+.deseos ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.deseos li {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+.mini {
+    width: 60px;
+    height: 60px;
+    margin: 0;
 }

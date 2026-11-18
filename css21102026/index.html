@@ -24,8 +24,8 @@
         //  Esto es un hook  //
         const { useState, useEffect } = React;
 
-        // Direccion de la API local (servidor Express de la carpeta server/).
-        const API_URL = "http://localhost:3000/items";
+        // Ruta relativa: el mismo servidor Express sirve la pagina y la API.
+        const API_URL = "/items";
 
         // Version 2: se agrega estado de carga, un mensaje de error visible para el
         // usuario (antes solo se imprimia en consola) y botones accesibles.
@@ -55,7 +55,7 @@
                     })
                     .catch(() => {
                         if (activo) {
-                            setError("No se pudo conectar con la API (localhost:3000). Se muestra la imagen por defecto.");
+                            setError("No se pudo conectar con la API. Se muestra la imagen por defecto.");
                         }
                     })
                     .finally(() => {
@@ -94,9 +94,115 @@
             );
         };
 
+        // Lista de deseos: lee, crea y borra con la API REST
+        const Deseos = () => {
+            const [deseos, setDeseos] = useState([]);
+            const [nombre, setNombre] = useState("");
+            const [imagen, setImagen] = useState("1");
+            const [cargando, setCargando] = useState(true);
+            const [error, setError] = useState("");
+
+            const cargar = () => {
+                fetch("/api/deseos")
+                    .then((res) => {
+                        if (!res.ok) {
+                            throw new Error("El servidor respondio " + res.status);
+                        }
+                        return res.json();
+                    })
+                    .then((res) => {
+                        if (Array.isArray(res)) {
+                            setDeseos(res);
+                            setError("");
+                        }
+                    })
+                    .catch(() => setError("No se pudieron cargar los deseos."))
+                    .finally(() => setCargando(false));
+            };
+
+            useEffect(cargar, []);
+
+            const crear = (e) => {
+                e.preventDefault();
+                fetch("/api/deseos", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ nombre: nombre, imagen: imagen })
+                })
+                    .then((res) => {
+                        if (!res.ok) {
+                            throw new Error("El servidor respondio " + res.status);
+                        }
+                        return res.json();
+                    })
+                    .then(() => {
+                        setNombre("");
+                        cargar();
+                    })
+                    .catch(() => setError("No se pudo crear el deseo."));
+            };
+
+            const borrar = (id) => {
+                fetch("/api/deseos/" + id, { method: "DELETE" })
+                    .then((res) => {
+                        if (!res.ok) {
+                            throw new Error("El servidor respondio " + res.status);
+                        }
+                        return res.json();
+                    })
+                    .then(() => cargar())
+                    .catch(() => setError("No se pudo borrar el deseo."));
+            };
+
+            return (
+                <section className="deseos">
+                    <h2>Mis deseos</h2>
+
+                    {cargando && <p className="estado">Cargando deseos...</p>}
+                    {error && <p className="estado error" role="alert">{error}</p>}
+
+                    <form onSubmit={crear}>
+                        <input
+                            type="text"
+                            placeholder="Nombre"
+                            value={nombre}
+                            onChange={(e) => setNombre(e.target.value)}
+                            aria-label="Nombre del deseo"
+                            required
+                        />
+                        <input
+                            type="number"
+                            min="1"
+                            placeholder="Imagen"
+                            value={imagen}
+                            onChange={(e) => setImagen(e.target.value)}
+                            aria-label="Numero de imagen"
+                            required
+                        />
+                        <button type="submit">Agregar</button>
+                    </form>
+
+                    <ul>
+                        {deseos.map((d) => (
+                            <li key={d.id}>
+                                <span>{d.nombre}</span>
+                                <img className="mini" src={`img/${d.imagen}.jpg`} alt={`Imagen ${d.imagen}`} />
+                                <button type="button" onClick={() => borrar(d.id)}>Borrar</button>
+                            </li>
+                        ))}
+                    </ul>
+                </section>
+            );
+        };
+
         // Renderizar la aplicacion en el DOM virtual
         const root = ReactDOM.createRoot(document.getElementById("root"));
-        root.render(<Info />);
+        root.render(
+            <>
+                <Info />
+                <Deseos />
+            </>
+        );
     </script>
 </body>
 

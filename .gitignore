@@ -5,3 +5,8 @@ build/
 .env
 .DS_Store
 Thumbs.db
+
+server/node_modules
+server/.env
+server/prisma/*.db
+server/prisma/*.db-journal
