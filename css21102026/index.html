@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Galeria que consume una API con fetch. Ejercicio de fundamentos de JavaScript con React y Express.">
     <title>Mi mejor deseo</title>
     <!-- CDN React -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
@@ -11,57 +12,90 @@
     <!-- CDN Babel -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <link rel="stylesheet" href="./style.css">
-
 </head>
 
 <body>
 
+    <noscript>Esta pagina necesita JavaScript activado para funcionar.</noscript>
+
     <div id="root"></div>
 
     <script type="text/babel">
-        //  esto es un hook // 
+        //  Esto es un hook  //
         const { useState, useEffect } = React;
 
+        // Direccion de la API local (servidor Express de la carpeta server/).
+        const API_URL = "http://localhost:3000/items";
+
+        // Version 2: se agrega estado de carga, un mensaje de error visible para el
+        // usuario (antes solo se imprimia en consola) y botones accesibles.
         const Info = () => {
-            const [data, setData] = useState([1]); // Datos que vienen del backend
+            const [data, setData] = useState([1]);        // Datos que vienen del backend
             const [currentInfo, setCurrentInfo] = useState(1);
+            const [cargando, setCargando] = useState(true);
+            const [error, setError] = useState("");
 
             useEffect(() => {
-                fetch("http://localhost:3000/items")
-                    .then((res) => res.json())
+                // Bandera para ignorar la respuesta si el componente ya se desmonto.
+                let activo = true;
+
+                fetch(API_URL)
                     .then((res) => {
-                        console.log(res.data);
-                        setData(res.data);
-                        if (res.data && res.data.length > 0) {
+                        if (!res.ok) {
+                            throw new Error("El servidor respondio " + res.status);
+                        }
+                        return res.json();
+                    })
+                    .then((res) => {
+                        if (!activo) return;
+                        if (Array.isArray(res.data) && res.data.length > 0) {
+                            setData(res.data);
                             setCurrentInfo(res.data[0]);
                         }
                     })
-                    .catch((e) => console.log(e))
-            }, [])
+                    .catch(() => {
+                        if (activo) {
+                            setError("No se pudo conectar con la API (localhost:3000). Se muestra la imagen por defecto.");
+                        }
+                    })
+                    .finally(() => {
+                        if (activo) setCargando(false);
+                    });
 
+                return () => {
+                    activo = false;
+                };
+            }, []);
 
             return (
                 <>
                     <h1>Mi mejor deseo</h1>
-                    <img src={`img/${currentInfo}.jpg`} alt="info" />
 
-                    {/* Opción 1: Tus botones manuales corregidos usando setCurrentInfo */}
-                 
+                    {cargando && <p className="estado">Cargando datos de la API...</p>}
+                    {error && <p className="estado error" role="alert">{error}</p>}
 
-                    <div>
-                        {data.map((item, index) => (
-                            <button key={index} onClick={() => setCurrentInfo(item)}>
+                    <img src={`img/${currentInfo}.jpg`} alt={`Imagen ${currentInfo} de la galeria`} />
+
+                    <div className="botones">
+                        {data.map((item) => (
+                            <button
+                                key={item}
+                                type="button"
+                                aria-label={`Mostrar la imagen ${item}`}
+                                aria-pressed={currentInfo === item}
+                                className={currentInfo === item ? "activo" : ""}
+                                onClick={() => setCurrentInfo(item)}
+                            >
                                 Push me {item}
                             </button>
                         ))}
                     </div>
                 </>
+            );
+        };
 
-            )
-        }
-
-        // Renderizar la aplicación en el DOM virtual
-        const root = ReactDOM.createRoot(document.getElementById('root'));
+        // Renderizar la aplicacion en el DOM virtual
+        const root = ReactDOM.createRoot(document.getElementById("root"));
         root.render(<Info />);
     </script>
 </body>

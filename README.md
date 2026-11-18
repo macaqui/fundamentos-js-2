@@ -17,6 +17,20 @@ Página que pide datos a un servidor local con `fetch("http://localhost:3000/ite
 y muestra una imagen según la respuesta. Si el servidor no está encendido, muestra la
 primera imagen por defecto (el error se controla con `.catch`).
 
+## Mejoras respecto a la versión 1
+
+Esta versión es la **iteración mejorada** del mismo ejercicio. Los cambios están en
+`css21102026/`:
+
+| Mejora | Antes | Ahora |
+| --- | --- | --- |
+| **Manejo de errores** | El error solo se imprimía en la consola | Se muestra un **mensaje visible** al usuario con `role="alert"` |
+| **Estado de carga** | No existía | Indicador *"Cargando datos de la API..."* mientras llega la respuesta |
+| **Validación de la respuesta** | Se asumía que la API siempre responde bien | Se comprueba `res.ok` y que `data` sea un arreglo antes de usarlo |
+| **Accesibilidad** | Botones sin etiquetas | `aria-label`, `aria-pressed` y botón activo resaltado |
+| **Evitar fugas** | El `useEffect` no limpiaba | Bandera `activo` que ignora la respuesta si el componente se desmontó |
+| **Responsive** | La imagen medía 600px fijos | Se adapta a pantallas pequeñas con `@media` |
+
 ## Cómo ejecutarlo
 
 **1. Enciende el servidor de la API:**
