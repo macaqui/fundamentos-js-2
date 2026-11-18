@@ -3,6 +3,8 @@
 Segunda versión de los ejercicios de **fundamentos de desarrollo web**: estructura de una
 página con React, estilos con CSS y **consumo de una API con `fetch`**.
 
+> 🌐 **En vivo:** <https://macaqui.github.io/fundamentos-js-2/>
+
 ## Contenido
 
 ```
