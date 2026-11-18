@@ -24,8 +24,9 @@
         //  Esto es un hook  //
         const { useState, useEffect } = React;
 
-        // Ruta relativa: el mismo servidor Express sirve la pagina y la API.
-        const API_URL = "/items";
+        // En local y en Render la API esta en el mismo servidor; en GitHub Pages uso la de Render.
+        const API = (location.hostname === "localhost" || location.hostname === "127.0.0.1" || location.hostname.indexOf("onrender.com") !== -1) ? "" : "https://fundamentos-js-2.onrender.com";
+        const API_URL = API + "/items";
 
         // Version 2: se agrega estado de carga, un mensaje de error visible para el
         // usuario (antes solo se imprimia en consola) y botones accesibles.
@@ -103,7 +104,7 @@
             const [error, setError] = useState("");
 
             const cargar = () => {
-                fetch("/api/deseos")
+                fetch(API + "/api/deseos")
                     .then((res) => {
                         if (!res.ok) {
                             throw new Error("El servidor respondio " + res.status);
@@ -124,7 +125,7 @@
 
             const crear = (e) => {
                 e.preventDefault();
-                fetch("/api/deseos", {
+                fetch(API + "/api/deseos", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ nombre: nombre, imagen: imagen })
@@ -143,7 +144,7 @@
             };
 
             const borrar = (id) => {
-                fetch("/api/deseos/" + id, { method: "DELETE" })
+                fetch(API + "/api/deseos/" + id, { method: "DELETE" })
                     .then((res) => {
                         if (!res.ok) {
                             throw new Error("El servidor respondio " + res.status);
