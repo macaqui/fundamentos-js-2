@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fundamentos de JavaScript (versión 2) · Samuel Hincapié</title>
+<meta name="description" content="Segunda versión de los ejercicios de fundamentos de desarrollo web, con estado de carga, manejo de errores y accesibilidad mejorados.">
+<style>
+  :root {
+    --fondo: #0d1117;
+    --panel: #161b22;
+    --borde: #2a3341;
+    --texto: #e6edf3;
+    --tenue: #9aa7b8;
+    --acento: #f0a83c;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    padding: 3rem 1.25rem 4rem;
+    background:
+      radial-gradient(60rem 30rem at 50% -10%, #1b2430 0%, transparent 70%),
+      var(--fondo);
+    color: var(--texto);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.6;
+  }
+
+  .envoltura { width: min(56rem, 100%); margin: 0 auto; }
+
+  .eyebrow {
+    margin: 0 0 .35rem;
+    font-size: .8rem;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--acento);
+  }
+
+  h1 { margin: 0 0 .5rem; font-size: clamp(1.7rem, 4vw, 2.4rem); line-height: 1.2; }
+
+  .lead { margin: 0 0 2.25rem; max-width: 46rem; color: var(--tenue); }
+
+  .tarjetas { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); }
+
+  .tarjeta {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    padding: 1.35rem;
+    border: 1px solid var(--borde);
+    border-radius: .9rem;
+    background: var(--panel);
+    color: inherit;
+    text-decoration: none;
+    transition: transform .15s ease, border-color .15s ease;
+  }
+
+  .tarjeta:hover, .tarjeta:focus-visible {
+    transform: translateY(-3px);
+    border-color: var(--acento);
+    outline: none;
+  }
+
+  .etiqueta {
+    align-self: flex-start;
+    padding: .15rem .55rem;
+    border-radius: 999px;
+    background: rgba(240, 168, 60, .12);
+    color: var(--acento);
+    font-size: .72rem;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+  }
+
+  .tarjeta h2 { margin: 0; font-size: 1.15rem; }
+  .tarjeta p { margin: 0; color: var(--tenue); font-size: .95rem; }
+
+  .ir { margin-top: .35rem; color: var(--acento); font-size: .9rem; font-weight: 600; }
+
+  .mejoras {
+    margin-top: 2rem;
+    padding: 1.15rem 1.35rem;
+    border: 1px solid var(--borde);
+    border-radius: .9rem;
+    background: var(--panel);
+  }
+
+  .mejoras h2 { margin: 0 0 .6rem; font-size: 1rem; color: var(--acento); }
+  .mejoras ul { margin: 0; padding-left: 1.15rem; color: var(--tenue); font-size: .93rem; }
+  .mejoras li { margin-bottom: .3rem; }
+
+  footer { margin-top: 2.5rem; color: var(--tenue); font-size: .85rem; }
+  footer a { color: var(--acento); }
+</style>
+</head>
+<body>
+  <div class="envoltura">
+    <p class="eyebrow">Samuel Hincapié · SENA</p>
+    <h1>Fundamentos de JavaScript <span style="color:var(--tenue);font-weight:400">(versión 2)</span></h1>
+    <p class="lead">
+      Segunda versión de los ejercicios: misma base de <strong>React + CSS + <code>fetch</code></strong>,
+      pero con <strong>estado de carga</strong>, <strong>manejo de errores visible</strong> y
+      <strong>accesibilidad</strong> mejorada.
+    </p>
+
+    <div class="tarjetas">
+      <a class="tarjeta" href="css07102026/index.html">
+        <span class="etiqueta">React · CSS</span>
+        <h2>Tarjeta personal</h2>
+        <p>Componente de React con estilos propios.</p>
+        <span class="ir">Abrir ejercicio →</span>
+      </a>
+
+      <a class="tarjeta" href="css21102026/index.html">
+        <span class="etiqueta">React · API · fetch</span>
+        <h2>Mi mejor deseo (galería)</h2>
+        <p>Galería que consume una API y ahora informa al usuario cuando falla.</p>
+        <span class="ir">Abrir ejercicio →</span>
+      </a>
+    </div>
+
+    <div class="mejoras">
+      <h2>Qué cambió respecto a la versión 1</h2>
+      <ul>
+        <li>Estado de carga mientras llega la respuesta de la API.</li>
+        <li>Mensaje de error visible (<code>role="alert"</code>) si el servidor no responde.</li>
+        <li>Validación de la respuesta: <code>res.ok</code> y <code>Array.isArray</code>.</li>
+        <li>Accesibilidad: <code>aria-label</code> y <code>aria-pressed</code> en los botones.</li>
+        <li>Limpieza del efecto para evitar actualizar un componente desmontado.</li>
+        <li>Diseño adaptado a pantallas pequeñas.</li>
+      </ul>
+    </div>
+
+    <footer>
+      Proyecto de la Técnica en Desarrollo de Software ·
+      <a href="https://github.com/macaqui/fundamentos-js-2">código en GitHub</a>
+    </footer>
+  </div>
+</body>
+</html>
